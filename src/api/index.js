@@ -22,12 +22,8 @@ const customFetch = async (url, { body, ...customConfig }) => {
         config.body = JSON.stringify(body);
     }
     try {
-        const response = await fetch(url, config, {
-            mode: 'cors',
-            headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
+        const response = await fetch(url, { ...config, mode: 'no-cors' });
+
         const data = await response.json();
         if (data.success) {
             return {

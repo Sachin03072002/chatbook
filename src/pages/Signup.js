@@ -64,7 +64,9 @@ const Signup = () => {
     if (auth.user) {
         return <Redirect to="/" />;
     }
-
+    if (auth.user) {
+        return <Redirect to='/' />
+    }
     return (
         <form className={styles.loginForm} onSubmit={handleFormSubmit}>
             <span className={styles.loginSignupHeader}> Signup</span>

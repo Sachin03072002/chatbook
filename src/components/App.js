@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { getPosts } from '../api';
-import { Home, Login, Settings } from "../pages";
+import { Home, Login, Settings, UserProfile } from "../pages";
 import Loader from './Loader';
 import NavBar from "./NavBar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "../pages/Signup";
 import { useAuth } from "../hooks";
+import { Redirect } from "react-router-dom";
 
 // const About = () => {
 //   return <h1>ABOUT</h1>
@@ -15,6 +16,21 @@ import { useAuth } from "../hooks";
 // }
 const NotFound = () => {
   return <h1>404</h1>
+}
+function PrivateRoute({ children, ...rest }) {
+  const auth = useAuth();
+  return (
+    <Route
+      {...rest}
+      render={() => {
+        if (auth.user) {
+          return children;
+        } else {
+          return <Redirect to="/login" />
+        }
+      }}
+    />
+  );
 }
 
 function App() {
@@ -33,7 +49,8 @@ function App() {
           {/* <Route exact path="/about" element={<About />} /> */}
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Signup />} />
-          <Route exact path="/settings" element={<Settings />} />
+          <PrivateRoute exact path="/settings" element={<Settings />} />
+          <PrivateRoute exact path="/user/:userId" element={<UserProfile />} />
           {/* <Route exact path="/user/asdasd" element={<UserInfo />} /> */}
           <Route exact path="*" element={<NotFound />} />
         </Routes>

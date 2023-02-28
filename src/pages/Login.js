@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import styles from '../styles/login.module.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { Redirect } from 'react-router-dom';
 import { useAuth } from '../hooks';
+
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,7 +26,9 @@ export default function Login() {
         setLoggingIn(false);
     };
 
-
+    if (auth.user) {
+        <Redirect to="/" />
+    }
     return (
         <>
             <ToastContainer />

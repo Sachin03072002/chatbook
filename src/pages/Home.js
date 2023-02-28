@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../styles/home.module.css';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 const Home = ({ posts }) => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -27,7 +28,8 @@ const Home = ({ posts }) => {
                             <img src="https://cdn4.iconfinder.com/data/icons/glyphs/24/icons_user-512.png" alt="user-pic" />
                         </div>
                         <div>
-                            <span className={styles.postAuthor}>{post.user.name}</span>
+                            <Link
+                                to={{ pathname: `/user/${post.user._id}`, state: { user: post.user, }, }} className={styles.postAuthor}>{post.user.name}</Link>
                             <span className={styles.postTime}> a minute ago</span>
 
                         </div>

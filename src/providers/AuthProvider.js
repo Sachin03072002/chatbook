@@ -5,6 +5,7 @@ const inittialState = {
     login: () => { },
     logout: () => { },
     loading: true,
+    signup: () => { },
 };
 export const AuthContext = createContext(inittialState);
 export const AuthProvider = ({ children }) => {

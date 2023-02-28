@@ -6,10 +6,10 @@ export const getItemInLocalStorage = (key) => {
     if (!key) {
         console.error('cannot store in local storage');
     }
-    localStorage.getItem(key);
+    return localStorage.getItem(key);
 }
 
-export const removeItemInLocalStorage = (key, value) => {
+export const removeItemInLocalStorage = (key) => {
     if (!key || !value) {
         console.error('cannot store in local storage');
     }

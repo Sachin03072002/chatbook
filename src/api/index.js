@@ -84,7 +84,7 @@ export const fetchUserFriends = async () => {
 };
 
 export const AddFriend = async (userId) => {
-    return customFetch(API_URLS.createFriendship(userId), {
+    return customFetch(API_URLS.removeFriend(userId), {
         method: 'POST',
     });
 };

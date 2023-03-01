@@ -50,7 +50,20 @@ const showAddFriendBtn = checkIfUserIsAFriend();
 
 
 const handleRemoveFriendClick = () => {
-
+    setRequestInProgress(true);
+    const response = await AddFriend(userId);
+    if (response.success) {
+        const friendship = auth.user.friends.filter((friend) => friend.to_user == userId);
+        auth.updateUserFriends(false, friendship[0]);
+        addToast('Friend deleted successfully', {
+            appearance: 'success'
+        });
+    } else {
+        addToast(response.message, {
+            appearance: 'error'
+        });
+    }
+    setRequestInProgress(false);
 }
 const handleAddFriendClick = () => {
     setRequestInProgress(true);

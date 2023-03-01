@@ -2,13 +2,14 @@ import { useLocation, useParams, useHistory } from 'react-router-dom';
 import styles from '../styles/settings.module.css';
 import { useAuth } from '../hooks';
 import { useEffect, useState } from 'react';
-import { fetchUserProfile } from '../api';
+import { AddFriend, fetchUserProfile } from '../api';
 import Loader from '../components';
 const UserProfile = () => {
     // const location = useLocation();
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
     const { userId } = useParams();
+    const [requestInProgress, setRequestInProgress] = useState(false);
     const auth = useAuth();
     const history = useHistory();
 
@@ -45,6 +46,29 @@ const UserProfile = () => {
 return false;
     }
 const showAddFriendBtn = checkIfUserIsAFriend();
+
+
+
+const handleRemoveFriendClick = () => {
+
+}
+const handleAddFriendClick = () => {
+    setRequestInProgress(true);
+    const response = await AddFriend(userId);
+    if (response.success) {
+        const { friendship } = response.data;
+        auth.updateUserFriends(true, friendship);
+        addToast('Friend added successfully', {
+            appearance: 'success'
+        });
+    } else {
+        addToast(response.message, {
+            appearance: 'error'
+        });
+    }
+    setRequestInProgress(false);
+
+}
 return (
     <div className={styles.settings}>
         <div className={styles.imgContainer}>
@@ -62,12 +86,12 @@ return (
 
         <div className={styles.btnGrp}>
             {checkIfUserIsAFriend() ? (
-                <button className={`button ${styles.saveBtn}`} onClick={() => setEditMode(false)}>
-                    Remove Friend
+                <button className={`button ${styles.saveBtn}`} onClick={() => setEditMode(false)} onClick={handleRemoveFriendClick} >
+                    {requestInProgress ? 'removing Friend...' : 'Remove Friend'}
                 </button>
             ) : (
-                <button className={`button ${styles.saveBtn}`} onClick={() => setEditMode(false)}>
-                    Add Friend
+                <button className={`button ${styles.saveBtn}`} onClick={() => setEditMode(false)} onClick={handleAddFriendClick} disabled={requestInProgress}>
+                    {requestInProgress ? 'Adding Friend...' : 'Add Friend'}
                 </button>
             )
             }

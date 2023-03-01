@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from '../providers/AuthProvider';
-import { editProfile, login as userLogin } from '../api';
+import { editProfile, fetchUserFriends, login as userLogin } from '../api';
 import { setItemInLocalStorage, LOCALSTORAGE_TOKEN_KEY, removeItemInLocalStorage, getItemInLocalStorage } from "../utlis";
 import jwt from 'jwt-decode';
 export const useAuth = () => {
@@ -10,12 +10,26 @@ export const useProvideAuth = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        const userToken = localStorage.getItem(LOCALSTORAGE_TOKEN_KEY);
-        if (userToken) {
-            const user = jwt(userToken);
-            setUser(user);
+        const getUser = async () => {
+            const userToken = localStorage.getItem(LOCALSTORAGE_TOKEN_KEY);
+            if (userToken) {
+                const user = jwt(userToken);
+                const response = await fetchUserFriends();
+                if (response.success) {
+                    setUser({
+                        friends=response.data.friends
+                    })
+                }
+
+                setUser({
+                    ...user,
+                    friends
+                });
+            }
+            setLoading(false);
+            getUser();
         }
-        setLoading(false);
+
     }, []);
 
     const updateUser = async (userId, name, password, confirmPassword) => {
@@ -62,6 +76,16 @@ export const useProvideAuth = () => {
         setUser(null);
         removeItemInLocalStorage(LOCALSTORAGE_TOKEN_KEY);
     };
+
+    const updateUserFriends = (addFriend, friend) => {
+        if (addFriend) {
+            setUser({
+                ...user,
+                friends: [...user.friend, friend],
+            });
+        }
+        return;
+    }
     return {
         user,
         loading,
@@ -69,6 +93,7 @@ export const useProvideAuth = () => {
         logout,
         signup,
         updateUser,
+        updateUserFriends,
 
     }
 

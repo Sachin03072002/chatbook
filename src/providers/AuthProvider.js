@@ -7,6 +7,7 @@ const inittialState = {
     loading: true,
     signup: () => { },
     updateUser: () => { },
+    updateUserFriends: () => { },
 };
 export const AuthContext = createContext(inittialState);
 export const AuthProvider = ({ children }) => {

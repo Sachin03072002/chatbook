@@ -70,3 +70,9 @@ export const editProfile = async (userId, name, email, password, confirmPassword
         body: { id: userId, name, email, password, confirmPassword: confirmPassword },
     });
 };
+
+export const fetchUserProfile = async (userId) => {
+    return customFetch(API_URLS.userInfo(userId), {
+        method: 'GET',
+    });
+};

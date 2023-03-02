@@ -88,3 +88,11 @@ export const AddFriend = async (userId) => {
         method: 'POST',
     });
 };
+export const AddPost = async (content) => {
+    return customFetch(API_URLS.createPost(), {
+        method: 'POST',
+        body: {
+            content: content,
+        }
+    });
+};

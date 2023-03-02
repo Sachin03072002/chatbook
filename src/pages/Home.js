@@ -2,29 +2,20 @@ import React, { useEffect, useState } from 'react'
 import styles from '../styles/home.module.css';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FriendsList } from '../components';
+import { CreatePost, FriendsList } from '../components';
 const Home = ({ posts }) => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const auth = useAuth();
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const response = await getPosts();
-            console.log('response', response);
-            if (response.success) {
-                setPosts(response.data.posts)
-            }
-            setLoading(false);
-        }
-        fetchPosts();
-    }, []);
-    if (loading) {
+    const posts = usePosts();
+    if (posts.loading) {
         return <Loader />
     }
     return (
         <div className={styles.home}>
+            <CreatePost />
             <div className={styles.postsList}>
-                {posts.map((post) => (
+                {posts.data.map((post) => (
                     <div className={styles.postwrapper} key={`post-${post._id}`}>
                         <div className={styles.postHeader}>
                             <div className={styles.postAvatar}>
@@ -44,7 +35,7 @@ const Home = ({ posts }) => {
                             <div className={styles.postLikes}>
                                 <img src="https://cdn0.iconfinder.com/data/icons/essentials-solid-glyphs-vol-1/100/Facebook-Like-Good-128.png" alt="likes-icon" />
                             </div>
-                            <span>5</span>
+                            <span>{post.likes.length}</span>
                         </div>
                         <div className={styles.postCommentsAction}>
                             <img src="https://cdn4.iconfinder.com/data/icons/glyphs/24/icons_Message-128.png" alt="comments-icon" />
